@@ -1,0 +1,168 @@
+Операторы выражений
+=================================================================================
+1. def % (other: Any): Column
+Выражение по модулю (так называемый остаток)
+---------------------------------------------------------------------------------
+2.def && (other: Any): Column
+Булево "И".
+
+// Scala: Далее выбираются люди, которые одновременно учатся в школе и работают.
+people.select( people("inSchool") && people("isEmployed") )
+
+// Java:
+people.select( people.col("inSchool").and(people.col("isEmployed")) );
+---------------------------------------------------------------------------------
+3.def * (other: Any): Column
+Умножение этого выражения на другое выражение.
+
+// Scala: Следующее умножает рост человека на его вес.
+people.select( people("height") * people("weight") )
+
+// Java:
+people.select( people.col("height").multiply(people.col("weight")) );
+---------------------------------------------------------------------------------
+4.def + (other: Any): Column
+Сумма этого выражения и другого выражения.
+
+// Scala: Далее выбирается сумма роста и веса человека.
+people.select( people("height") + people("weight") )
+
+// Java:
+people.select( people.col("height").plus(people.col("weight")) );
+---------------------------------------------------------------------------------
+5.def - (other: Any): Column
+Вычитание. Вычтите из этого выражения другое выражение.
+
+// Scala: Следующее выбирает разницу между ростом людей и их весом.
+people.select( people("height") - people("weight") )
+
+// Java:
+people.select( people.col("height").minus(people.col("weight")) );
+---------------------------------------------------------------------------------
+6.def / (other: Any): Column
+Разделите это выражение на другое выражение.
+
+// Scala: Следующее делит рост человека на его вес.
+people.select( people("height") / people("weight") )
+
+// Java:
+people.select( people.col("height").divide(people.col("weight")) );
+---------------------------------------------------------------------------------
+7.def < (other: Any): Column
+Меньше, чем. - Less than.
+
+// Scala: Следующее выбирает людей моложе 21 года.
+people.select( people("age") < 21 )
+
+// Java:
+people.select( people.col("age").lt(21) );
+---------------------------------------------------------------------------------
+8.def <= (other: Any): Column
+Меньше или равно. - Less than or equal to.
+
+// Scala: Следующее выбирает людей в возрасте 21 года или моложе 21 года.
+people.select( people("age") <= 21 )
+
+// Java:
+people.select( people.col("age").leq(21) );
+---------------------------------------------------------------------------------
+9.def <=> (other: Any): Column
+Проверка равенства, безопасная для нулевых значений.
+---------------------------------------------------------------------------------
+10.def =!= (other: Any): Column
+Тест неравенства. - Inequality test.
+
+// Scala:
+df.select( df("colA") =!= df("colB") )
+df.select( !(df("colA") === df("colB")) )
+
+// Java:
+import static org.apache.spark.sql.functions.*;
+df.filter( col("colA").notEqual(col("colB")) );
+---------------------------------------------------------------------------------
+11.def === (other: Any): Column
+Тест на равенство.
+
+// Scala:
+df.filter( df("colA") === df("colB") )
+
+// Java
+import static org.apache.spark.sql.functions.*;
+df.filter( col("colA").equalTo(col("colB")) );
+---------------------------------------------------------------------------------
+12.def > (other: Any): Column
+Больше чем. - Greater than.
+
+// Scala: Ниже выбираются люди старше 21 года.
+people.select( people("age") > 21 )
+
+// Java:
+import static org.apache.spark.sql.functions.*;
+people.select( people.col("age").gt(21) );
+---------------------------------------------------------------------------------
+13.def >= (other: Any): Column
+Больше или равно выражению.
+
+// Scala: Ниже выбираются люди в возрасте 21 года и старше 21 года.
+people.select( people("age") >= 21 )
+
+// Java:
+people.select( people.col("age").geq(21) )
+---------------------------------------------------------------------------------
+14.def cast (to: String): Column
+Приводит столбец к другому типу данных, используя каноническое строковое
+представление типа.
+Поддерживаемые типы: 
+	строка - "string", логическое значение - "boolean", байт - "byte",
+	короткое - "short", целое - "int", длинное - "long", плавающее - "float",
+	двойное - "double", десятичное - "decimal", дата - "date", 
+	временная метка - "timestamp".
+ 
+
+// Casts colA to integer.
+df.select(df("colA").cast("int"))
+---------------------------------------------------------------------------------
+15.def otherwise (value: Any): Column
+Оценивает список условий и возвращает одно из нескольких возможных результирующих
+выражений. Если иное не определено в конце, для несовпадающих условий возвращается
+значение null.
+
+// Пример: кодирование столбца строки гендера в целое число.
+
+// Scala:
+people.select(when(people("gender") === "male", 0)
+  .when(people("gender") === "female", 1)
+  .otherwise(2))
+
+// Java:
+people.select(when(col("gender").equalTo("male"), 0)
+  .when(col("gender").equalTo("female"), 1)
+  .otherwise(2))
+---------------------------------------------------------------------------------
+16.def when (condition: Column, value: Any): Column
+Оценивает список условий и возвращает одно из нескольких возможных результирующих
+выражений. Если иное не определено в конце, для несовпадающих условий возвращается
+значение null.
+
+// Пример: кодирование столбца строки гендера в целое число.
+
+// Scala:
+people.select(when(people("gender") === "male", 0)
+  .when(people("gender") === "female", 1)
+  .otherwise(2))
+
+// Java:
+people.select(when(col("gender").equalTo("male"), 0)
+  .when(col("gender").equalTo("female"), 1)
+  .otherwise(2))
+---------------------------------------------------------------------------------
+17.def || (other: Any): Column
+Булево "ИЛИ"
+
+// Scala: Ниже выбираются люди, которые учатся или работают.
+people.filter( people("inSchool") || people("isEmployed") )
+
+// Java:
+people.filter( people.col("inSchool").or(people.col("isEmployed")) );
+---------------------------------------------------------------------------------
+18.

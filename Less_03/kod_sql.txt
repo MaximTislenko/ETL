@@ -1,0 +1,8 @@
+SELECT ID_Тикета, Статус, SUM(Длительность) Длительность FROM zad_03.tab_02 GROUP BY 1,2 ORDER BY 1,2;
+
+SELECT ID_Тикета, Статус, SUM(Длительность) OVER(PARTITION BY ID_Тикета, Статус) FROM zad_03.tab_02;
+
+SELECT ID_Тикета, Статус, SUM(Длительность) OVER(PARTITION BY ID_Тикета, Статус) Длительность FROM zad_03.tab_02 ORDER BY 1,2;
+
+
+GROUP_CONCAT

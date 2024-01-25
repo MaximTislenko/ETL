@@ -49,6 +49,77 @@ scala> spark.version
 
 3. Как создать SparkSession
   Создание SparkSession имеет фундаментальное значение, поскольку оно инициализирует среду, необходимую для использования возможностей Apache Spark.
+   Чтобы создать SparkSession в Scala или Python, вам необходимо использовать метод шаблона компоновщика builder() и вызвать метод getOrCreate().
+Он возвращает уже существующий SparkSession; в противном случае создается новый SparkSession. В приведенном ниже примере создается SparkSession в Scala.
+
+// Create SparkSession object
+import org.apache.spark.sql.SparkSession
+object SparkSessionTest extends App {
+  val spark = SparkSession.builder()
+      .master("local[1]")
+      .appName("SparkByExamples.com")
+      .getOrCreate();
+  println(spark)
+  println("Spark Version : "+spark.version)
+}
+
+// Outputs
+// org.apache.spark.sql.SparkSession@2fdf17dc
+// Spark Version : 3.4.1
+
+Из приведенного выше кода :–)
+**SparkSession.builder() – Возвращает класс SparkSession.Builder. Это конструктор для SparkSession. master(), appName() и getOrCreate() — это методы SparkSession.Builder.
+**master() — позволяет приложениям Spark подключаться и работать в разных режимах (локальный, автономный кластер, Mesos, YARN), в зависимости от конфигурации.:
+    ~Используйте local[x] при работе на локальном ноутбуке. x должен быть целочисленным значением и должен быть больше 0; это показывает, 
+сколько разделов следует создать при использовании RDD, DataFrame и Dataset. В идеале значение x должно соответствовать количеству имеющихся у вас ядер ЦП.
+    ~Для автономного использования используйте spark://master:7077.
+**appName()  – задает имя приложения Spark, которое отображается в веб-интерфейсе Spark. Если имя приложения не задано, оно устанавливает случайное имя.
+**getOrCreate() – возвращает объект SparkSession, если он уже существует. Создает новый, если он не существует.
+
+3.1 Получение существующего сеанса SparkSession
+  Вы можете получить существующий SparkSession в Scala программно, используя приведенный ниже пример. Чтобы получить существующий SparkSession, вам не нужно указывать имя приложения, мастер и т. д.
+
+// Get existing SparkSession 
+import org.apache.spark.sql.SparkSession
+val spark2 = SparkSession.builder().getOrCreate()
+print(spark2)
+
+// Output:
+// org.apache.spark.sql.SparkSession@2fdf17dc
+
+Сравните хеш объекта spark и spark2. Поскольку он вернул существующий сеанс, оба объекта имеют одинаковое значение хеш-функции.
+
+3.2 Создайте еще один сеанс SparkSession
+  Иногда вам может потребоваться создать несколько сеансов, чего можно легко добиться с помощью метода newSession(). При этом используется то же имя приложения и мастер, что и в существующем сеансе. 
+Базовый SparkContext будет одинаковым для обоих сеансов, поскольку для каждого приложения Spark может быть только один контекст.
+
+
+// Create a new SparkSession
+val spark3 = spark.newSession()
+print(spark3)
+
+// Output:
+// org.apache.spark.sql.SparkSession@692dba54
+
+Сравните этот хеш с хешем из приведенного выше примера; оно должно быть другим.
+
+3.4 Создание SparkSession с включением Hive
+  Чтобы использовать Hive со Spark - (https://sparkbyexamples.com/spark/spark-sql-read-hive-table/), вам необходимо включить его 
+с помощью метода EnableHiveSupport() - (https://sparkbyexamples.com/spark/spark-enable-hive-support/). SparkSession из Spark2.0 обеспечивает встроенную поддержку операций Hive, таких как написание 
+запросов к таблицам Hive с использованием HQL, доступ к пользовательским функциям Hive и чтение данных из таблиц Hive.
+
+// Enabling Hive to use in Spark
+val spark = SparkSession.builder()
+      .master("local[1]")
+      .appName("SparkByExamples.com")
+      .config("spark.sql.warehouse.dir", "<path>/spark-warehouse")
+      .enableHiveSupport()
+      .getOrCreate();
+
+
+4. Другие варианты использования SparkSession
+
+
 
 
 

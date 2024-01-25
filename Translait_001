@@ -1,0 +1,80 @@
+https://sparkbyexamples.com/spark/sparksession-explained-with-examples/
+Что такое SparkSession | Точка входа
+
+  Чтобы создать SparkSession в Scala или Python, вам необходимо использовать метод шаблона компоновщика builder() и вызвать метод getOrCreate().
+Он возвращает уже существующий SparkSession; в противном случае создается новый SparkSession. В приведенном ниже примере создается SparkSession в Scala.
+  SparkSession объединяет несколько ранее отдельных контекстов, таких как SQLContext, HiveContext и StreamingContext, в одну точку входа, 
+упрощая взаимодействие со Spark и его различными API. Он позволяет пользователям выполнять различные операции, такие как чтение данных 
+из различных источников, выполнение SQL-запросов, создание фреймов данных и наборов данных, а также эффективное выполнение действий
+с распределенными наборами данных.
+  Для тех, кто работает со Spark через CLI искровой оболочки, переменная «spark» автоматически предоставляет сеанс Spark по умолчанию,
+устраняя необходимость создания вручную в этом контексте. 
+  spark-shell(https://sparkbyexamples.com/spark/sparksession-explained-with-examples/#:~:text=Spark%20through%20the-,spark%2Dshell,-CLI%2C%20the%20%E2%80%98spark)
+
+В этой статье я углублюсь в суть SparkSession, в то, как создать объект SparkSession, и изучу его часто используемые методы.
+
+Что такое SparkSession.
+  SparkSession был представлен в версии Spark 2.0. Это точка входа в базовые функции Spark для программного создания Spark RDD, DataFrame и DataSet.
+Объект SparkSession — это переменная по умолчанию, доступная в искровой оболочке, и ее можно создать программно с помощью шаблона компоновщика SparkSession.
+  Если вы ищете объяснение PySpark, обратитесь к разделу «Как создать SparkSession в PySpark». (https://sparkbyexamples.com/pyspark/pyspark-what-is-sparksession/)
+
+1. Введение в SparkSession
+  Как упоминалось вначале, SparkSession — это точка входа в Spark, и создание экземпляра SparkSession будет первым оператором, который вы напишете в программе с помощью
+RDD (https://sparkbyexamples.com/spark-rdd-tutorial/), DataFrame (https://sparkbyexamples.com/spark-dataframe-tutorial/) и Dataset.
+SparkSession будет создан с использованием шаблона компоновщика SparkSession.builder().
+  До Spark 2.0 точкой входа была SparkContext (https://sparkbyexamples.com/spark/spark-sparkcontext/), и она не была полностью заменена SparkSession.
+Многие функции SparkContext по-прежнему доступны и используются в Spark 2.0 и более поздних версиях. Вы также должны знать, 
+что SparkSession внутренне создает SparkConfig и SparkContext с конфигурацией, предоставленной SparkSession.
+  В Spark 2.0 появился новый класс org.apache.spark.sql.SparkSession, который представляет собой комбинированный класс для всех различных контекстов, 
+которые у нас были до версии 2.0 (SQLContext, HiveContext и т. д.); следовательно, сеанс Spark можно использовать вместо SQLContext, HiveContext и других контекстов.
+  Spark Session также включает в себя все API, доступные в разных контекстах:
+->SparkContext
+->SQLContext
+->StreamingContext
+->HiveContext
+Сколько сеансов SparkSession можно создать в приложении?
+  В приложении Spark вы можете создать столько SparkSession, сколько захотите, используя SparkSession.builder() или SparkSession.newSession().
+Многие объекты сеанса Spark необходимы, если вы хотите логически разделить таблицы Spark (реляционные сущности).
+
+2. SparkSession в spark-shell (искровой оболочке)
+  По умолчанию оболочка Spark предоставляет объект Spark, который является экземпляром класса SparkSession.
+Мы можем напрямую использовать этот объект, когда это необходимо, в spark-shell (искровой оболочке) 
+(https://sparkbyexamples.com/spark/spark-shell-usage-with-examples/).
+
+// Usage of spark variable
+scala> spark.version
+
+Как и в оболочке Spark, в большинстве инструментов, записных книжек и Azure Databricks среда создает объект SparkSession по умолчанию, 
+который мы можем использовать, поэтому вам не придется беспокоиться о создании сеанса Spark.
+
+3. Как создать SparkSession
+  Создание SparkSession имеет фундаментальное значение, поскольку оно инициализирует среду, необходимую для использования возможностей Apache Spark.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

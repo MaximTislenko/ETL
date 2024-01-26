@@ -118,6 +118,96 @@ val spark = SparkSession.builder()
 
 
 4. Другие варианты использования SparkSession
+4.1 Установка и получение всех конфигураций Spark
+    После создания SparkSession вы можете добавить конфигурации Spark во время выполнения или получить все конфигурации.
+
+// Set Config
+spark.conf.set("spark.sql.shuffle.partitions", "30")
+
+// Get all Spark Configs
+val configMap:Map[String, String] = spark.conf.getAll
+
+4.2 Создать фрейм данных
+    SparkSession также предоставляет несколько методов для создания кадра данных и 
+набора данных Spark (https://sparkbyexamples.com/spark/different-ways-to-create-a-spark-dataframe/). 
+В приведенном ниже примере используется метод createDataFrame(), который принимает список данных.
+
+// Create DataFrame
+val df = spark.createDataFrame(
+    List(("Scala", 25000), ("Spark", 35000), ("PHP", 21000)))
+df.show()
+
+// Output:
+// +-----+-----+
+// |   _1|   _2|
+// +-----+-----+
+// |Scala|25000|
+// |Spark|35000|
+// |  PHP|21000|
+// +-----+-----+
+
+4.3 Работа со Spark SQL
+    Используя SparkSession, вы можете получить доступ к возможностям Spark SQL в Apache Spark. Чтобы сначала использовать функции SQL, 
+вам необходимо создать временное представление в Spark (https://sparkbyexamples.com/spark/spark-createorreplacetempview-vs-registertemptable/). 
+Получив временное представление, вы можете запускать любые запросы ANSI SQL, используя метод spark.sql().
+
+// Spark SQL
+df.createOrReplaceTempView("sample_table")
+val df2 = spark.sql("SELECT _1,_2 FROM sample_table")
+df2.show()
+
+Временные представления Spark SQL относятся к области сеанса и будут недоступны, если сеанс, создавший их, завершится. 
+Если вы хотите иметь временное представление, которое используется всеми сеансами и сохраняется до тех пор, 
+пока приложение Spark не завершится, вы можете создать глобальное временное представление с помощью createGlobalTempView().
+
+4.4 Создание таблицы ульев (таблиц Hive)
+    Как объяснялось выше, SparkSession также можно использовать для создания таблиц Hive и выполнения запросов к ним. 
+Обратите внимание: для тестирования вам не обязательно устанавливать Hive. saveAsTable() создает управляемую таблицу Hive. 
+Запросите таблицу с помощью spark.sql().
+
+// Create Hive table & query it.  
+spark.table("sample_table").write.saveAsTable("sample_hive_table")
+val df3 = spark.sql("SELECT _1,_2 FROM sample_hive_table")
+df3.show()
+
+4.5 Работа с каталогами
+    Чтобы получить метаданные каталога, Spark Session предоставляет переменную каталога. 
+Обратите внимание, что эти методы spark.catalog.listDatabases и spark.catalog.listTables возвращают набор данных.
+
+// Get metadata from the Catalog
+// List databases
+val ds = spark.catalog.listDatabases
+ds.show(false)
+
+// Output:
+// +-------+----------------+----------------------------+
+// |name   |description     |locationUri                 |
+// +-------+----------------+----------------------------+
+// |default|default database|file:/<path>/spark-warehouse|
+// +-------+----------------+----------------------------+
+
+// List Tables
+val ds2 = spark.catalog.listTables
+ds2.show(false)
+
+// Output:
+// +-----------------+--------+-----------+---------+-----------+
+// |name             |database|description|tableType|isTemporary|
+// +-----------------+--------+-----------+---------+-----------+
+// |sample_hive_table|default |null       |MANAGED  |false      |
+// |sample_table     |null    |null       |TEMPORARY|true       |
+// +-----------------+--------+-----------+---------+-----------+
+
+    Обратите внимание на две таблицы, которые мы создали на данный момент: 
+таблица sample_table, созданная из Spark.createOrReplaceTempView, считается временной таблицей, 
+а таблица Hive — управляемой таблицей(https://sparkbyexamples.com/apache-hive/difference-between-hive-internal-tables-and-external-tables/).
+
+5. Часто используемые методы SparkSession
+
++--------------------------+---------------------------------------------------------------------------------------------------------------+
+| 
+METHOD	DESCRIPTION
+
 
 
 
